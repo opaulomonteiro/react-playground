@@ -1,3 +1,1 @@
 # react-playground
-
-test
