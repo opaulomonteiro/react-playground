@@ -4,44 +4,53 @@ import { useRouter } from "next/router";
 import Header from "../components/header/index";
 import MessageList from "../components/message-list/index";
 import appConfig from "../config.json";
-import { v4 as uuidv4 } from "uuid";
-import moment from "moment";
-import { getDataFromLocalStorage } from '../utils/index'
+import { getDataFromLocalStorage } from "../utils/index";
+import { fetchMessages, saveMessage } from "../api/supabase/index";
+import { CircularProgress} from '@mui/material'
 
 export default function ChatPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
   const [messages, setMessageOnList] = useState([]);
-  const username = getDataFromLocalStorage('username');
+  const [message, setMessage] =  useState({});
+  const username = getDataFromLocalStorage("username");
 
   useEffect(() => {
-    if(!username){
+    const fetchData = async () => {
+      setMessageOnList( await fetchMessages());
+    };
+    fetchData();
+    setLoading(false);
+  }, [message]);
+
+  useEffect(() => {
+    if (!username) {
       router.push({ pathname: "/" });
     }
-  },[username])
+  }, [username]);
 
   const handleTextEvent = (onKeyPressEvent) => {
-    if (onKeyPressEvent.key === "Enter") {
+    if (onKeyPressEvent.key === "Enter") {      
       onKeyPressEvent.preventDefault();
       sendMessage();
     }
   };
 
   const onClickMessage = (value) => {
-      value.preventDefault();
-      sendMessage();
-  }
+    value.preventDefault();
+    sendMessage();
+  };
 
-  const sendMessage = ()  =>{
+  const sendMessage = async() => {
     const message = {
-        id: uuidv4(),
-        text: text,
-        from: username,
-        time: moment().format(),
+      text: text,
+      from: username
     };
-    setMessageOnList([message, ...messages]);
+    await saveMessage(message);
     setText("");
-}
+    setMessage(message);
+  };
 
   return (
     <Box
@@ -84,7 +93,7 @@ export default function ChatPage() {
             padding: "16px",
           }}
         >
-          <MessageList messages={messages} setMessages={setMessageOnList}/>
+          { loading ? <CircularProgress/> : <MessageList messages={messages} setMessages={setMessageOnList}/>}
 
           <Box
             as="form"
@@ -127,5 +136,5 @@ export default function ChatPage() {
         </Box>
       </Box>
     </Box>
-  );    
+  );
 }

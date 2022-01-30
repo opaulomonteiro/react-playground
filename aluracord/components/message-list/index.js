@@ -1,20 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Text, Image, Button } from "@skynexui/components";
 import appConfig from "../../config.json";
 import moment from "moment";
-import filter from "lodash/filter";
+import { deleteMessage, fetchMessages } from "../../api/supabase/index";
+
 
 export default function MessageList(props) {
   const { messages, setMessages } = props;
+  const [deletedMessage, setDeletedMessage] = useState("");
 
-  const deleteMessageClick = (event) => {
+  useEffect(() => {
+    if(deletedMessage){
+      const fetchData = async () => {
+        setMessages( await fetchMessages());
+      };
+      fetchData();
+    }    
+  }, [deletedMessage]);
+
+  const deleteMessageClick = async (event) => {
     event.preventDefault();
     const messageIdToDelete = event.target.id;
     if(messageIdToDelete){
-      const listMessages = filter(messages, function (message) {
-        return message.id !== messageIdToDelete;
-      });
-      setMessages(listMessages);
+      await deleteMessage(messageIdToDelete);
+      setDeletedMessage(messageIdToDelete);
     }    
   };
 
@@ -31,7 +40,6 @@ export default function MessageList(props) {
       }}
     >
       {messages?.map((message) => {
-        console.log("message", message);
         return (
           <Text
             key={message.id}
@@ -80,7 +88,7 @@ export default function MessageList(props) {
                 }}
                 tag="span"
               >
-                às {moment(message.time).format("HH:mm")}
+                at {moment(message.created_at).format("HH:mm")}
               </Text>
             </Box>
             {message.text}

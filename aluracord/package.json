@@ -4,16 +4,20 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.3.1",
     "@skynexui/components": "^1.24.2",
+    "@supabase/supabase-js": "^1.29.4",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
     "next": "^12.0.9",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "uuid": "^8.3.2",
-    "moment": "^2.29.1",
-    "lodash": "^4.17.21"    
-  }, 
+    "react-async": "^10.0.1",
+    "react-dom": "^17.0.2"
+  },
   "devDependencies": {
-    "babel-plugin-transform-imports":"^2.0.0"
+    "babel-plugin-transform-imports": "^2.0.0"
   },
   "scripts": {
     "dev": "next dev",
