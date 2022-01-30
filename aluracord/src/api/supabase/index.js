@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import authConfig from '../../auth-config.json';
+import authConfig from '../../../auth-config.json';
 
 const supabaseClient = createClient(
     authConfig.supabase.url,

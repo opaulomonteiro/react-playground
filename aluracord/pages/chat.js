@@ -1,12 +1,13 @@
 import { Box, TextField, Button } from "@skynexui/components";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Header from "../components/header/index";
-import MessageList from "../components/message-list/index";
+import Header from "../src/components/header/index";
+import MessageList from "../src/components/message-list/index";
 import appConfig from "../config.json";
-import { getDataFromLocalStorage } from "../utils/index";
-import { fetchMessages, saveMessage } from "../api/supabase/index";
+import { getDataFromLocalStorage } from "../src/utils/index";
+import { fetchMessages, saveMessage } from "../src/api/supabase/index";
 import { CircularProgress} from '@mui/material'
+import ButtonSendSticker from "../src/components/sticker";
 
 export default function ChatPage() {
   const router = useRouter();
@@ -42,9 +43,20 @@ export default function ChatPage() {
     sendMessage();
   };
 
+  const onStickerClick = async(sticker) => {
+    const stickerMessage = {
+      text: sticker,
+      from: username,
+      type: 'sticker'
+    }
+    await saveMessage(stickerMessage);
+    setMessage(stickerMessage);
+  }
+
   const sendMessage = async() => {
     const message = {
       text: text,
+      type: 'text',
       from: username
     };
     await saveMessage(message);
@@ -121,6 +133,9 @@ export default function ChatPage() {
                 color: appConfig.theme.colors.neutrals[200],
               }}
             />
+
+            <ButtonSendSticker onStickerClick={onStickerClick} />
+            
             <Button
               type="submit"
               label="Enviar"

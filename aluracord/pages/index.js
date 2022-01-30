@@ -2,8 +2,8 @@ import { Box, Button, Text, TextField, Image } from "@skynexui/components";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import appConfig from "../config.json";
-import  Title  from "../components/title/index";
-import { useLocalStorageState } from "../utils/index";
+import  Title  from "../src/components/title/index";
+import { useLocalStorageState } from "../src/utils/index";
 
 export default function PaginaInicial() {
   const [username, setUsername] = useLocalStorageState("username", "");

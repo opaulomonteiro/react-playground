@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Text, Image, Button } from "@skynexui/components";
-import appConfig from "../../config.json";
+import appConfig from "../../../config.json";
 import moment from "moment";
 import { deleteMessage, fetchMessages } from "../../api/supabase/index";
 
@@ -91,7 +91,7 @@ export default function MessageList(props) {
                 at {moment(message.created_at).format("HH:mm")}
               </Text>
             </Box>
-            {message.text}
+            { message.type === 'sticker' ? <Image src={message.text}/> : message.text }
           </Text>
         );
       })}

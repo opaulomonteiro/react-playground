@@ -1,4 +1,3 @@
-node_modules/
-.next/
-yarn-error.log
-auth-config.json
+aluracord/node_modules/
+aluracord/.next/
+aluracord/auth-config.json
